@@ -2,13 +2,15 @@
   "name": "typed-translation",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
+  "type": "commonjs",
   "license": "ISC",
   "devDependencies": {
     "@types/commander": "^2.12.2",
@@ -19,6 +21,8 @@
   "dependencies": {
     "commander": "^10.0.0",
     "figlet": "^1.5.2",
-    "object-set": "^1.0.1"
+    "json-to-ts": "^1.7.0",
+    "object-set": "^1.0.1",
+    "object-unset": "^1.0.1"
   }
 }
