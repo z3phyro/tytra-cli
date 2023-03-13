@@ -1,6 +1,7 @@
 import { Command } from "commander"; // add this line
 const set = require("object-set");
 const unset = require("object-unset");
+const at = require("object-at");
 const figlet = require("figlet");
 import fs from "fs";
 import JsonToTS from "json-to-ts";
@@ -14,7 +15,8 @@ const locations = {
 
 const fileNames: { [id: string | "default"]: string } = {
   interface: 'translation.interface.ts',
-  default: 'translation.ts'
+  default: 'translation.ts',
+  json: 'translation.json',
 };
 
 
@@ -48,7 +50,7 @@ const writeInterface = (json: any) => {
   fs.writeFileSync(locations.write + fileNames['interface'], result);
 }
 
-const readTranslation = (dict = "default"): object => {
+const readTranslation = (dict = "json"): object => {
   let result = {};
   try {
     if (!fs.existsSync(locations.write)) {
@@ -68,14 +70,34 @@ const readTranslation = (dict = "default"): object => {
 }
 
 const writeTranslation = (json: object, dict = "default") => {
-  let result = `
-  import { TranslationInterface } from "./translation.interface";
-  
-  const Translation: TranslationInterface = ${JSON.stringify(json)};
-  module.exports = Translation;
+  fs.writeFileSync(locations.write + fileNames['json'], JSON.stringify(json));
+  let result = `import { TranslationInterface } from "./translation.interface";
+
+export const Translation: TranslationInterface = ${JSON.stringify(json)};
   `;
 
   fs.writeFileSync(locations.write + fileNames[dict], result);
+}
+
+
+const removeAction = (entry_path: string) => {
+  let json = readTranslation();
+
+  unset(json, entry_path);
+
+  writeTranslation(json);
+
+  console.log(`Entry removed ${entry_path} \n`);
+  try {
+    const parts = entry_path.split(".");
+    parts.pop();
+
+    const obj = at(json, parts.join("."))
+    if (Object.keys(obj).length === 0) {
+      removeAction(parts.join("."));
+    }
+  } catch (e) { }
+
 }
 
 const list = program.command("list");
@@ -101,15 +123,7 @@ add
 const remove = program.command("remove <entry.path>");
 remove
   .description("Removes an entry from the translations")
-  .action((entry_path) => {
-    let json = readTranslation();
-
-    unset(json, entry_path);
-
-    writeTranslation(json);
-
-    console.log(`Entry removed ${entry_path} \n`);
-  });
+  .action(removeAction);
 
 program.parse(process.argv);
 
