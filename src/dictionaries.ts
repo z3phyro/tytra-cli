@@ -1,40 +1,58 @@
-import { locations } from "./constants";
 import { readFile, writeFile } from "./io";
+import { writeTranslation } from "./translation";
+import { clearEntries } from "./utils";
 
-export const addDictionary = (shortName: string, name: string) => { };
+export const addDictionary = (shortName: string, name: string) => {
+	const dicts = getDictionaries();
+	dicts[shortName] = name;
 
-export const writeDictionaries = (dicts: any) => {
-  const keys = Object.keys(dicts);
-  let result = "";
+	writeDictionaries(dicts);
+	initNewTranslation(name);
 
-  for (let key of keys) {
-    result += `import { ${dicts[key]}Translation } from "./${dicts[
-      key
-    ].toLowerCase()}.translation"; \n`;
-  }
-
-  result += "\n";
-  result += "export default { \n";
-  for (let key of keys) {
-    result += `  "${key}": ${dicts[key]}Translation,\n`;
-  }
-  result += "} as const;\n";
-
-  writeFile(locations.write + "translation.ts", result);
+	console.log(`Added ${name} dictionary`);
 };
 
-export const getDictionaries = (): { [id: string]: string } => readFile(locations.write + "dictionaries.json", locations.require + "dictionaries.json") as any;
+export const initNewTranslation = (name: string) => {
+	const dicts = getDictionaries();
+	const defaultKey = Object.keys(dicts)[0];
+
+	let json = readFile(`${defaultKey.toLowerCase()}.translation.json`);
+	json = clearEntries(json);
+	writeTranslation(json, `${name.toLowerCase()}.translation.json`);
+}
+
+export const writeDictionaries = (dicts: any) => {
+	const keys = Object.keys(dicts);
+	let result = "";
+
+	for (let key of keys) {
+		result += `import { ${dicts[key]}Translation } from "./${dicts[
+			key
+		].toLowerCase()}.translation"; \n`;
+	}
+
+	result += "\n";
+	result += "export default { \n";
+	for (let key of keys) {
+		result += `  "${key}": ${dicts[key]}Translation,\n`;
+	}
+	result += "} as const;\n";
+
+	writeFile("translation.ts", result);
+};
+
+export const getDictionaries = (): { [id: string]: string } => readFile("dictionaries.json") as any;
 
 export const initDictionaries = () => {
-  const dicts = {
-    en: "English",
-    es: "Spanish",
-  };
+	const dicts = {
+		en: "English",
+		es: "Spanish",
+	};
 
-  console.log("Initializing dictionaries... \n");
+	console.log("Initializing dictionaries... \n");
 
-  writeFile(locations.write + "dictionaries.json", JSON.stringify(dicts));
-  writeDictionaries(dicts);
+	writeFile("dictionaries.json", JSON.stringify(dicts));
+	writeDictionaries(dicts);
 
-  console.log("Dictionaries initialized \n");
+	console.log("Dictionaries initialized \n");
 };

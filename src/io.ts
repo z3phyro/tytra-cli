@@ -1,10 +1,10 @@
 import fs from "fs";
 
-export const readFile = (path: string, requirePath: string): object => {
+export const readFile = (filename: string): object => {
   let result = {};
   try {
-    if (fs.existsSync(path)) {
-      result = require(requirePath);
+    if (fs.existsSync(`translations/${filename}`)) {
+      result = require(`../translations/${filename}`);
     }
   } catch (e) {
     console.log(e);
@@ -12,6 +12,6 @@ export const readFile = (path: string, requirePath: string): object => {
   return result;
 };
 
-export const writeFile = (path: string, data: string) => {
-  fs.writeFileSync(path, data);
+export const writeFile = (filename: string, data: string) => {
+  fs.writeFileSync(`translations/${filename}`, data);
 };

@@ -3,7 +3,6 @@ const unset = require("object-unset");
 const set = require("object-set");
 const at = require("object-at");
 import fs from "fs";
-import { fileNames, locations } from "./constants";
 import { readFile, writeFile } from "./io";
 import { getDictionaries, initDictionaries } from "./dictionaries";
 
@@ -54,23 +53,23 @@ export const writeInterface = (json: any) => {
     "export interface TranslationInterface"
   );
 
-  fs.writeFileSync(locations.write + fileNames["interface"], result);
+  writeFile("translation.interface.ts", result);
 };
 
 export const readTranslation = (dictName = "english"): object => {
   return readFile(
-    locations.write + `${dictName}.translation.json`,
-    locations.require + `${dictName}.translation.json`);
+    `${dictName}.translation.json`
+  );
 };
 
 export const writeTranslation = (json: object, dictName = "English") => {
-  writeFile(locations.write + `${dictName.toLowerCase()}.translation.json`, JSON.stringify(json, null, 2));
+  writeFile(`${dictName.toLowerCase()}.translation.json`, JSON.stringify(json, null, 2));
   let result = `import { TranslationInterface } from "./translation.interface"; 
 
 export const ${dictName}Translation: TranslationInterface = ${JSON.stringify(json, null, 2)};
 `;
 
-  writeFile(locations.write + `${dictName.toLowerCase()}.translation.ts`, result);
+  writeFile(`${dictName.toLowerCase()}.translation.ts`, result);
 };
 
 export const removeTranslation = (entry_path: string) => {
@@ -94,8 +93,8 @@ export const removeTranslation = (entry_path: string) => {
 
 export const initTranslations = () => {
   try {
-    if (!fs.existsSync(locations.write)) {
-      fs.mkdirSync(locations.write);
+    if (!fs.existsSync("translations/")) {
+      fs.mkdirSync("translations/");
     }
   } catch (e) { }
 

@@ -1,10 +1,11 @@
 import { Command } from "commander";
+import { addDictionary } from "./dictionaries";
 const figlet = require("figlet");
 import {
-    addTranslation,
-    initTranslations,
-    listTranslation,
-    removeTranslation,
+  addTranslation,
+  initTranslations,
+  listTranslation,
+  removeTranslation,
 } from "./translation";
 
 // figlet("tradu", (err: any, data: any) => console.log(data));
@@ -12,37 +13,38 @@ import {
 const program = new Command();
 
 const list = program
-    .command("list")
-    .description("Lists the dictionaries entries")
-    .action(listTranslation);
+  .command("list")
+  .description("Lists the dictionaries entries")
+  .action(listTranslation);
 
 const add = program
-    .command("add <entry.path> [default_value]")
-    .description(
-        "Adds a new entry. Entry path is the index inside the translation object separated by periods."
-    )
-    .action(addTranslation);
+  .command("add <entry.path> [default_value]")
+  .description(
+    "Adds a new entry. Entry path is the index inside the translation object separated by periods."
+  )
+  .action(addTranslation);
 
 const remove = program
-    .command("remove <entry.path>")
-    .description("Removes an entry from the translations")
-    .action(removeTranslation);
+  .command("remove <entry.path>")
+  .description("Removes an entry from the translations")
+  .action(removeTranslation);
 
 const init = program
-    .command("init")
-    .description("Initialise translations")
-    .action(initTranslations);
+  .command("init")
+  .description("Initialise translations")
+  .action(initTranslations);
 
-const add_dict = program
-    .command("add_dict <short_name> <long_name>")
-    .description("Adds a new dictionary");
+const newDict = program
+  .command("new-dict <short_name> <long_name>")
+  .description("Adds a new dictionary")
+  .action(addDictionary);
 
 const list_dict = program
-    .command("list_dict")
-    .description("Lists the dictionaries");
+  .command("list-dict")
+  .description("Lists the dictionaries");
 
 const remove_dict = program
-    .command("remove_dict <short_name>")
-    .description("Removes a dictionary");
+  .command("remove_dict <short_name>")
+  .description("Removes a dictionary");
 
 program.parse(process.argv);
