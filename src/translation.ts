@@ -4,7 +4,7 @@ const set = require("object-set");
 const at = require("object-at");
 import fs from "fs";
 import { readFile, writeFile } from "./io";
-import { getDictionaries, initDictionaries } from "./dictionaries";
+import { getDictionaries, initDictionaries, writeDictionaries } from "./dictionaries";
 
 export const surfTranslations = (json: any, trail = "") => {
   const keys = Object.keys(json);
@@ -15,6 +15,7 @@ export const surfTranslations = (json: any, trail = "") => {
     else console.log(path, json[key]);
   }
 };
+
 
 export const listTranslation = () => {
   const json = readTranslation();
@@ -116,3 +117,16 @@ export const initTranslations = () => {
     writeTranslation(json, dict);
   }
 };
+
+export const translationSync = () => {
+  const dicts = getDictionaries();
+  writeDictionaries(dicts);
+
+  let count = 0;
+  for (let dict of Object.values(dicts)) {
+    const json = readFile(`${dict.toLowerCase()}.translation.json`);
+    if (count == 0) writeInterface(json);
+
+    writeTranslation(json, dict);
+  }
+}

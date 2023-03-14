@@ -6,6 +6,7 @@ import {
   initTranslations,
   listTranslation,
   removeTranslation,
+  translationSync,
 } from "./translation";
 
 // figlet("tradu", (err: any, data: any) => console.log(data));
@@ -48,5 +49,10 @@ const dictRemove = program
   .command("dict remove <short_name>")
   .description("Removes a dictionary")
   .action(removeDictionary);
+
+const sync = program
+  .command("sync")
+  .description("Syncs the json files into the typed files. Useful for importing common translation files.")
+  .action(translationSync);
 
 program.parse(process.argv);
