@@ -21,23 +21,23 @@ export const listTranslation = () => {
   surfTranslations(json);
 };
 
-export const addTranslation = (entry_path: string, default_value: string) => {
+export const addTranslation = (entry_path: string, default_values: string[]) => {
   let json = readTranslation();
   let count = 0;
 
-  set(json, entry_path, default_value || "-");
-
-  writeInterface(json);
   const dicts = getDictionaries();
   for (let dict of Object.values(dicts)) {
-    if (count == 1) {
-      set(json, entry_path, "-");;
+    set(json, entry_path, default_values[count] || "-");;
+    writeTranslation(json, dict);
+
+    if (count == 0) {
+      writeInterface(json);
     }
-    writeTranslation(json, dict.toLowerCase());
+
     count++;
   }
 
-  console.log(`Entry added ${entry_path} ${default_value} in ${count} Dictionaries \n`);
+  console.log(`Entry added ${entry_path} ${default_values} in ${count} Dictionaries \n`);
 };
 
 export const writeInterface = (json: any) => {
@@ -66,7 +66,7 @@ export const writeTranslation = (json: object, dictName = "English") => {
   writeFile(`${dictName.toLowerCase()}.translation.json`, JSON.stringify(json, null, 2));
   let result = `import { TranslationInterface } from "./translation.interface"; 
 
-export const ${dictName}Translation: TranslationInterface = ${JSON.stringify(json, null, 2)};
+export const ${dictName}Translation: TranslationInterface = ${JSON.stringify(json, null, 2).replace(/"(\w+)"\s*:/g, '$1:')};
 `;
 
   writeFile(`${dictName.toLowerCase()}.translation.ts`, result);

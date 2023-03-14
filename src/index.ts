@@ -18,9 +18,9 @@ const list = program
   .action(listTranslation);
 
 const add = program
-  .command("add <entry.path> [default_value]")
+  .command("add <entry.path> [values...]")
   .description(
-    "Adds a new entry. Entry path is the index inside the translation object separated by periods."
+    "Adds a new entry. Entry path is the index inside the translation object separated by periods. Values better be typed within 'simple quotes' because there are issues with double quotes: E.g. add general.bye 'Bye' 'Adios' "
   )
   .action(addTranslation);
 
