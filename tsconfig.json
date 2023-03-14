@@ -9,5 +9,5 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
   },
-  "exclude": ["node_modules", "translations"]
+  "exclude": ["node_modules", "translations", "*.test.ts"]
 }

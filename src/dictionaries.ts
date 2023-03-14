@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "./io";
+import { readFile, removeFile, writeFile } from "./io";
 import { writeTranslation } from "./translation";
 import { clearEntries } from "./utils";
 
@@ -6,19 +6,46 @@ export const addDictionary = (shortName: string, name: string) => {
 	const dicts = getDictionaries();
 	dicts[shortName] = name;
 
+	writeFile("dictionaries.json", JSON.stringify(dicts, null, 2));
 	writeDictionaries(dicts);
 	initNewTranslation(name);
 
 	console.log(`Added ${name} dictionary`);
 };
 
+export const listDictionaries = () => {
+	const dicts = getDictionaries();
+
+	console.log('Dictionaries: \n');
+	for (let dict of Object.entries(dicts)) {
+		console.log(`${dict[0]} ${dict[1]} `);
+	}
+}
+
+export const removeDictionary = (shortName: string) => {
+	const dicts = getDictionaries();
+	const name = dicts[shortName]
+	delete dicts[shortName];
+
+	writeFile("dictionaries.json", JSON.stringify(dicts, null, 2));
+	writeDictionaries(dicts);
+	removeTranslationFile(name);
+
+	console.log(`Dictionary ${name} Removed`);
+}
+
+export const removeTranslationFile = (name: string) => {
+	removeFile(`${name.toLowerCase()}.translation.json`);
+	removeFile(`${name.toLowerCase()}.translation.ts`);
+}
+
 export const initNewTranslation = (name: string) => {
 	const dicts = getDictionaries();
-	const defaultKey = Object.keys(dicts)[0];
+	const defaultKey = Object.values(dicts)[0];
 
-	let json = readFile(`${defaultKey.toLowerCase()}.translation.json`);
-	json = clearEntries(json);
-	writeTranslation(json, `${name.toLowerCase()}.translation.json`);
+	const json = readFile(`${defaultKey.toLowerCase()}.translation.json`);
+	clearEntries(json);
+	writeTranslation(json, name);
 }
 
 export const writeDictionaries = (dicts: any) => {

@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { addDictionary } from "./dictionaries";
+import { addDictionary, listDictionaries, removeDictionary } from "./dictionaries";
 const figlet = require("figlet");
 import {
   addTranslation,
@@ -34,17 +34,19 @@ const init = program
   .description("Initialise translations")
   .action(initTranslations);
 
-const newDict = program
-  .command("new-dict <short_name> <long_name>")
+const dictNew = program
+  .command("dict new <short_name> <long_name>")
   .description("Adds a new dictionary")
   .action(addDictionary);
 
-const list_dict = program
-  .command("list-dict")
-  .description("Lists the dictionaries");
+const dictList = program
+  .command("dict list")
+  .description("Lists the dictionaries")
+  .action(listDictionaries);
 
-const remove_dict = program
-  .command("remove_dict <short_name>")
-  .description("Removes a dictionary");
+const dictRemove = program
+  .command("dict remove <short_name>")
+  .description("Removes a dictionary")
+  .action(removeDictionary);
 
 program.parse(process.argv);

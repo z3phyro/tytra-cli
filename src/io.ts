@@ -1,5 +1,11 @@
 import fs from "fs";
 
+export const removeFile = (filename: string) => {
+  if (fs.existsSync(`translations/${filename}`)) {
+    fs.rmSync(`translations/${filename}`);
+  }
+}
+
 export const readFile = (filename: string): object => {
   let result = {};
   try {
