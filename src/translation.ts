@@ -130,3 +130,40 @@ export const translationSync = () => {
     writeTranslation(json, dict);
   }
 }
+
+export const getCoverage = (dict: any, verbose = false) => {
+  let totalKeys = 0;
+  let translatedKeys = 0;
+
+  const arraySurfer = (json: any, trail: string) => {
+    const keys = Object.keys(json);
+
+    for (let key of keys) {
+      const path = `${trail ? trail + "." : ""}${key}`;
+      if (typeof json[key] == "object") arraySurfer(json[key], path);
+      else {
+        totalKeys++;
+        if (json[key] && json[key] != "-") {
+          translatedKeys++;
+        } else if (verbose) {
+          console.log(path)
+        }
+      }
+    }
+  }
+
+  arraySurfer(dict, "");
+
+  return ((translatedKeys * 100) / totalKeys).toFixed(0);
+}
+
+export const translationCoverage = (language: string | undefined) => {
+  const dicts = getDictionaries();
+  if (!language) {
+    for (let dict of Object.keys(dicts)) {
+      console.log(`${dicts[dict]} ${getCoverage(readFile(`${dicts[dict].toLowerCase()}.translation.json`))}%`);
+    }
+  } else {
+    console.log(`${dicts[language]} ${getCoverage(readFile(`${dicts[language].toLowerCase()}.translation.json`), true)}%`);
+  }
+}

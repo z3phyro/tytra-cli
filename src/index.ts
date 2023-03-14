@@ -6,12 +6,18 @@ import {
   initTranslations,
   listTranslation,
   removeTranslation,
+  translationCoverage,
   translationSync,
 } from "./translation";
 
-// figlet("tradu", (err: any, data: any) => console.log(data));
+console.log("\n ----------------------------- \n" + figlet.textSync("TyTra") + "\n ----------------------------- \n");
 
 const program = new Command();
+
+const init = program
+  .command("init")
+  .description("Initialise translations")
+  .action(initTranslations);
 
 const list = program
   .command("list")
@@ -30,20 +36,15 @@ const remove = program
   .description("Removes an entry from the translations")
   .action(removeTranslation);
 
-const init = program
-  .command("init")
-  .description("Initialise translations")
-  .action(initTranslations);
+const dictList = program
+  .command("dict list")
+  .description("Lists the dictionaries")
+  .action(listDictionaries);
 
 const dictNew = program
   .command("dict new <short_name> <long_name>")
   .description("Adds a new dictionary")
   .action(addDictionary);
-
-const dictList = program
-  .command("dict list")
-  .description("Lists the dictionaries")
-  .action(listDictionaries);
 
 const dictRemove = program
   .command("dict remove <short_name>")
@@ -54,5 +55,10 @@ const sync = program
   .command("sync")
   .description("Syncs the json files into the typed files. Useful for importing common translation files.")
   .action(translationSync);
+
+const coverage = program
+  .command("coverage [language]")
+  .description("Prints the coverage of the translation through languages")
+  .action(translationCoverage);
 
 program.parse(process.argv);
