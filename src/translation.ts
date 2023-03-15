@@ -3,7 +3,7 @@ const unset = require("object-unset");
 const set = require("object-set");
 const at = require("object-at");
 import fs from "fs";
-import { readFile, writeFile } from "./io";
+import { readFile, readTypedFile, writeFile } from "./io";
 import { getDictionaries, initDictionaries, writeDictionaries } from "./dictionaries";
 
 export const surfTranslations = (json: any, trail = "") => {
@@ -23,11 +23,12 @@ export const listTranslation = () => {
 };
 
 export const addTranslation = (entry_path: string, default_values: string[]) => {
-  let json = readTranslation();
-  let count = 0;
-
   const dicts = getDictionaries();
-  for (let dict of Object.values(dicts)) {
+  const languages = Object.values(dicts);
+
+  let count = 0;
+  for (let dict of languages) {
+    let json = readTranslation(dict);
     set(json, entry_path, default_values[count] || "-");;
     writeTranslation(json, dict);
 
@@ -58,13 +59,12 @@ export const writeInterface = (json: any) => {
 };
 
 export const readTranslation = (dictName = "english"): object => {
-  return readFile(
-    `${dictName}.translation.json`
+  return readTypedFile(
+    `${dictName.toLowerCase()}.translation.ts`
   );
 };
 
 export const writeTranslation = (json: object, dictName = "English") => {
-  writeFile(`${dictName.toLowerCase()}.translation.json`, JSON.stringify(json, null, 2));
   let result = `import { TranslationInterface } from "./translation.interface"; 
 
 export const ${dictName}Translation: TranslationInterface = ${JSON.stringify(json, null, 2).replace(/"(\w+)"\s*:/g, '$1:')};
@@ -73,23 +73,32 @@ export const ${dictName}Translation: TranslationInterface = ${JSON.stringify(jso
   writeFile(`${dictName.toLowerCase()}.translation.ts`, result);
 };
 
-export const removeTranslation = (entry_path: string) => {
-  let json = readTranslation();
+export const removeTranslations = (entry_path: string) => {
+  const dicts = getDictionaries();
+
+  for (let language of Object.values(dicts)) {
+    removeTranslation(entry_path, language);
+  }
+}
+export const removeTranslation = (entry_path: string, language: string) => {
+  let json = readTranslation(language);
 
   unset(json, entry_path);
 
   writeTranslation(json);
 
-  console.log(`Entry removed ${entry_path} \n`);
+  console.log(`Entry removed ${entry_path} for ${language}\n`);
   try {
     const parts = entry_path.split(".");
     parts.pop();
 
     const obj = at(json, parts.join("."));
     if (Object.keys(obj).length === 0) {
-      removeTranslation(parts.join("."));
+      removeTranslation(parts.join("."), language);
     }
-  } catch (e) { }
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export const initTranslations = () => {
@@ -161,9 +170,14 @@ export const translationCoverage = (language: string | undefined) => {
   const dicts = getDictionaries();
   if (!language) {
     for (let dict of Object.keys(dicts)) {
-      console.log(`${dicts[dict]} ${getCoverage(readFile(`${dicts[dict].toLowerCase()}.translation.json`))}%`);
+      console.log(`${dict} ${dicts[dict]} ${getCoverage(readTypedFile(`${dicts[dict].toLowerCase()}.translation.ts`))}%`);
     }
   } else {
-    console.log(`${dicts[language]} ${getCoverage(readFile(`${dicts[language].toLowerCase()}.translation.json`), true)}%`);
+    let index = language.toLowerCase();
+
+    if (dicts[index]) {
+      index = dicts[index];
+    }
+    console.log(`${index} ${getCoverage(readTypedFile(`${index.toLowerCase()}.translation.ts`), true)}%`);
   }
 }

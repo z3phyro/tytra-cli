@@ -6,11 +6,12 @@ import {
   initTranslations,
   listTranslation,
   removeTranslation,
+  removeTranslations,
   translationCoverage,
   translationSync,
 } from "./translation";
 
-console.log("\n ----------------------------- \n" + figlet.textSync("TyTra") + "\n ----------------------------- \n");
+// console.log("\n ----------------------------- \n" + figlet.textSync("TyTra") + "\n ----------------------------- \n");
 
 const program = new Command();
 
@@ -34,20 +35,20 @@ const add = program
 const remove = program
   .command("remove <entry.path>")
   .description("Removes an entry from the translations")
-  .action(removeTranslation);
+  .action(removeTranslations);
 
 const dictList = program
-  .command("dict list")
+  .command("dict-list")
   .description("Lists the dictionaries")
   .action(listDictionaries);
 
 const dictNew = program
-  .command("dict new <short_name> <long_name>")
+  .command("dict-new <short_name> <long_name>")
   .description("Adds a new dictionary")
   .action(addDictionary);
 
 const dictRemove = program
-  .command("dict remove <short_name>")
+  .command("dict-remove <short_name>")
   .description("Removes a dictionary")
   .action(removeDictionary);
 

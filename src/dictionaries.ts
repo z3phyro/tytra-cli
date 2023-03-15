@@ -1,8 +1,9 @@
-import { readFile, removeFile, writeFile } from "./io";
+import { readFile, readTypedFile, removeFile, writeFile } from "./io";
 import { writeTranslation } from "./translation";
 import { clearEntries } from "./utils";
 
 export const addDictionary = (shortName: string, name: string) => {
+	console.log("Adding new dict");
 	const dicts = getDictionaries();
 	dicts[shortName] = name;
 
@@ -35,7 +36,6 @@ export const removeDictionary = (shortName: string) => {
 }
 
 export const removeTranslationFile = (name: string) => {
-	removeFile(`${name.toLowerCase()}.translation.json`);
 	removeFile(`${name.toLowerCase()}.translation.ts`);
 }
 
@@ -43,7 +43,7 @@ export const initNewTranslation = (name: string) => {
 	const dicts = getDictionaries();
 	const defaultKey = Object.values(dicts)[0];
 
-	const json = readFile(`${defaultKey.toLowerCase()}.translation.json`);
+	const json = readTypedFile(`${defaultKey.toLowerCase()}.translation.ts`);
 	clearEntries(json);
 	writeTranslation(json, name);
 }
