@@ -1,14 +1,18 @@
 {
-  "name": "typed-translation",
-  "version": "0.1.0",
-  "description": "",
+  "name": "typed-translations",
+  "version": "0.2.0",
+  "description": "CLI inspired by prisma, to achieve statically typed translations on any typescript project.",
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
+    "postbuild": "echo '#!/usr/bin/env node' | cat - index.js > temp && mv temp index.js",
     "test": "jest"
   },
-  "keywords": [],
-  "author": "",
+  "bin": {
+    "tytra": "./dist/index.js"
+  },
+  "keywords": ["translation", "typed", "i18n", "typescript", "javascript", "library", "react", "svelte", "vue", "solidjs"],
+  "author": "z3phyro maykel.meneses89@gmail.com",
   "license": "ISC",
   "devDependencies": {
     "@jest/globals": "^29.5.0",

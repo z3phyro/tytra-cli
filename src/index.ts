@@ -5,7 +5,6 @@ import {
   addTranslation,
   initTranslations,
   listTranslation,
-  removeTranslation,
   removeTranslations,
   translationCoverage,
   translationSync,
