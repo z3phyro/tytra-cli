@@ -28,7 +28,7 @@ export const readFile = (filename: string): object => {
   let result = {};
   try {
     if (fs.existsSync(`translations/${filename}`)) {
-      result = require(`../translations/${filename}`);
+      result = JSON.parse(fs.readFileSync(`translations/${filename}`).toString());
     }
   } catch (e) {
     console.log(e);

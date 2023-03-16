@@ -10,7 +10,7 @@ import {
   translationSync,
 } from "./translation";
 
-// console.log("\n ----------------------------- \n" + figlet.textSync("TyTra") + "\n ----------------------------- \n");
+console.log("\n ----------------------------- \n" + figlet.textSync("TyTra") + "\n ----------------------------- \n");
 
 const program = new Command();
 

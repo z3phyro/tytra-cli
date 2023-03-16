@@ -1,10 +1,10 @@
-import JsonToTS from "json-to-ts";
 const unset = require("object-unset");
 const set = require("object-set");
 const at = require("object-at");
 import fs from "fs";
 import { readFile, readTypedFile, writeFile } from "./io";
 import { getDictionaries, initDictionaries, writeDictionaries } from "./dictionaries";
+import { generateInterface } from "./utils";
 
 export const surfTranslations = (json: any, trail = "") => {
   const keys = Object.keys(json);
@@ -43,18 +43,7 @@ export const addTranslation = (entry_path: string, default_values: string[]) => 
 };
 
 export const writeInterface = (json: any) => {
-  const interfaces = JsonToTS(json);
-  let result = "";
-
-  for (let inter of interfaces) {
-    result += inter + "\n";
-  }
-
-  result = result.replace(
-    "interface RootObject",
-    "export interface TranslationInterface"
-  );
-
+  const result = generateInterface(json);
   writeFile("translation.interface.ts", result);
 };
 
