@@ -14,7 +14,7 @@ export const readTypedFile = (filename: string): object => {
       const raw = fs.readFileSync(`translations/${filename}`).toString();
       const regex = /= ({.*})/s;
       const regResult = regex.exec(raw);
-      const rawJSON = regResult![1].replace(/(\w+)\s*:/g, '"$1":');
+      const rawJSON = regResult![1].replace(/(\w+)\s*:/g, '"$1":').replace(/: '(.*)'/g, ': "$1"');
       return JSON.parse(rawJSON);
     }
   } catch (e) {

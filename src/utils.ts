@@ -10,6 +10,6 @@ export const generateInterface = (json: any, name = "Translations") => {
 	return `export interface ${name}Interface ${JSON.stringify(json, null, 2)
 		.replace(/("\w+"): (".*")(,?\n)/g, '$1: string$3')
 		.replace(/"(\w+)"\s*:/g, '$1:')
-		}; `
+		}; `;
 }
 

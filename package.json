@@ -1,7 +1,7 @@
 {
   "name": "@z3phyro/typed-translations",
-  "version": "0.2.3",
-  "description": "CLI inspired by prisma, to achieve statically typed translations on any typescript project.",
+  "version": "0.2.5",
+  "description": "CLI inspired by prisma, to create and mantain statically typed translations on any typescript project.",
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
