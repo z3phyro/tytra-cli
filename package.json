@@ -1,46 +1,43 @@
 {
-  "name": "@z3phyro/typed-translations",
-  "version": "0.2.5",
-  "description": "CLI inspired by prisma, to create and mantain statically typed translations on any typescript project.",
-  "main": "index.js",
-  "scripts": {
-    "build": "npx tsc",
-    "postbuild": "echo '#!/usr/bin/env node' | cat - dist/index.js > temp && mv temp dist/index.js",
-    "test": "jest"
-  },
-  "bin": {
-    "tytra": "./dist/index.js"
-  },
-  "keywords": [
-    "translation",
-    "typed",
-    "i18n",
-    "typescript",
-    "javascript",
-    "library",
-    "react",
-    "svelte",
-    "vue",
-    "solidjs"
-  ],
-  "author": "z3phyro maykel.meneses89@gmail.com",
-  "license": "ISC",
-  "devDependencies": {
-    "@jest/globals": "^29.5.0",
-    "@types/commander": "^2.12.2",
-    "@types/figlet": "^1.5.5",
-    "@types/jest": "^29.4.1",
-    "@types/node": "^18.15.0",
-    "jest": "^29.5.0",
-    "ts-jest": "^29.0.5",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.5"
-  },
-  "dependencies": {
-    "commander": "^10.0.0",
-    "figlet": "^1.5.2",
-    "object-at": "^1.0.1",
-    "object-set": "^1.0.1",
-    "object-unset": "^1.0.1"
-  }
+    "name": "@z3phyro/tytra-cli",
+    "version": "0.2.8",
+    "description": "CLI inspired by prisma, to create and mantain statically typed translations on any typescript project.",
+    "main": "lib/index.js",
+    "scripts": {
+        "prepublish": "npm run build",
+        "build": "npx tsc",
+        "postbuild": "echo '#!/usr/bin/env node' | cat - lib/index.js > temp && mv temp lib/index.js"
+    },
+    "files": [
+        "lib"
+    ],
+    "bin": {
+        "tytra": "./lib/index.js"
+    },
+    "keywords": [
+        "translation",
+        "typed",
+        "i18n",
+        "typescript",
+        "javascript",
+        "library",
+        "react",
+        "svelte",
+        "vue",
+        "solidjs"
+    ],
+    "author": "z3phyro maykel.meneses89@gmail.com",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/commander": "^2.12.2",
+        "@types/figlet": "^1.5.5",
+        "@types/node": "^18.15.0",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.5"
+    },
+    "dependencies": {
+        "@z3phyro/tytra-core": "^0.1.20",
+        "commander": "^10.0.0",
+        "figlet": "^1.5.2"
+    }
 }

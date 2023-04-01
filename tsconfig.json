@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "lib",
     "strict": true,
     "target": "es6",
     "module": "commonjs",
@@ -9,5 +9,5 @@
     "esModuleInterop": true,
     "moduleResolution": "node"  
   },
-  "exclude": ["node_modules", "translations", "*.test.ts"]
+  "exclude": ["node_modules", "translations"]
 }
