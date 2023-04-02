@@ -24,7 +24,7 @@ const program = new Command();
 
 const init = program
     .command("init")
-    .description("Initialise translations")
+    .description("Initialize translations")
     .action(initTranslations);
 
 const list = program

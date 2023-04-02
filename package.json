@@ -1,6 +1,6 @@
 {
     "name": "@z3phyro/tytra-cli",
-    "version": "0.2.8",
+    "version": "0.2.9",
     "description": "CLI inspired by prisma, to create and mantain statically typed translations on any typescript project.",
     "main": "lib/index.js",
     "scripts": {
@@ -13,6 +13,10 @@
     ],
     "bin": {
         "tytra": "./lib/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/z3phyro/tytra-cli.git"
     },
     "keywords": [
         "translation",
